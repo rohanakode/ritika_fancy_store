@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ritika Fancy Store & Tailoring Material</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --brand-yellow: #ffef00;
+        --brand-red: #c1272d;
+        --brand-purple: #4a4fa1;
+        --dark: #1a1a1a;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Montserrat", sans-serif;
+        background-color: #ffffff;
+        color: var(--dark);
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Oswald", sans-serif;
+        text-transform: uppercase;
+      }
+
+      /* --- STICKY NAVBAR --- */
+      .navbar {
+        position: sticky !important;
+        top: 0;
+        z-index: 2000;
+        background-color: #fff;
+        border-bottom: 2px solid var(--brand-purple);
+        padding: 10px 0;
+      }
+      .nav-link {
+        font-weight: 700;
+        color: var(--dark) !important;
+        text-transform: uppercase;
+        margin: 0 15px;
+        font-size: 0.9rem;
+      }
+
+      /* --- HEADER --- */
+      .hero {
+        background-color: var(--brand-yellow);
+        padding: 45px 15px;
+        text-align: center;
+        width: 100%;
+      }
+      .hero h1 {
+        font-size: 3.5rem;
+        margin: 0;
+        color: #000;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .hero p {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #000;
+        margin-top: 10px;
+      }
+
+      .ribbon {
+        background-color: var(--brand-red);
+        color: white;
+        padding: 12px 5px;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        width: 100%;
+      }
+
+      /* --- DESKTOP SIDEBAR WITH TOGGLE --- */
+      .accordion-button {
+        background-color: #fff !important;
+        color: var(--brand-purple) !important;
+        font-weight: 700;
+        border-top: 5px solid var(--brand-red) !important;
+        font-size: 0.9rem;
+      }
+      .item-list-container li {
+        padding: 8px 0;
+        border-bottom: 1px dashed #eee;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+      }
+      .item-list-container li i {
+        width: 25px;
+        color: var(--brand-purple);
+      }
+
+      /* --- LEFT-ALIGNED PRODUCT CARDS --- */
+      .product-card {
+        border: 1px solid #eee;
+        margin-bottom: 25px;
+        background: #fff;
+        text-align: center;
+        max-width: 400px;
+        margin-right: auto;
+      }
+      .product-image-area {
+        height: 200px;
+        background-color: #f8f8f8;
+        border-bottom: 4px solid var(--brand-yellow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .product-image-area img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .product-info {
+        padding: 15px;
+      }
+
+      /* --- MOBILE ONLY FAB TOGGLE --- */
+      .floating-toggle {
+        position: fixed;
+        bottom: 110px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: var(--brand-purple);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3000;
+        border: 2px solid var(--brand-yellow);
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Mobile Inventory Drawer */
+      #inventoryOverlay {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100%;
+        background: #fff;
+        z-index: 4000;
+        transition: 0.4s;
+        padding: 40px 25px;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+      }
+      #inventoryOverlay.active {
+        right: 0;
+      }
+      .overlay-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+        z-index: 3999;
+      }
+
+      /* --- FOOTER NAV FIX --- */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0; /* Ensures it sticks to the absolute bottom */
+        left: 0;
+        width: 100%;
+        height: 65px;
+        background: white;
+        border-top: 2px solid var(--brand-purple);
+        display: none;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 2000;
+        padding-bottom: env(
+          safe-area-inset-bottom
+        ); /* Fixes issues on newer iPhones with bottom bars */
+      }
+      .nav-btn {
+        text-align: center;
+        color: var(--dark);
+        text-decoration: none;
+        font-size: 0.65rem;
+        font-weight: 800;
+      }
+      .nav-btn i {
+        display: block;
+        font-size: 1.2rem;
+        color: var(--brand-red);
+        margin-bottom: 2px;
+      }
+
+      @media (max-width: 991px) {
+        .navbar,
+        .desktop-sidebar-container {
+          display: none;
+        }
+        .hero {
+          padding: 10px 10px !important;
+        }
+
+        .hero h1 {
+          font-size: 1.8rem !important;
+        }
+        .hero p {
+          font-size: 0.7rem !important;
+          margin-top: 2px !important;
+        }
+        .bottom-nav,
+        .floating-toggle {
+          display: flex;
+        }
+        body {
+          padding-bottom: 65px; /* Matches Nav height exactly to remove extra gap */
+        }
+
+        .product-card {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="floating-toggle d-lg-none" onclick="toggleInventory()">
+      <i class="fas fa-list-ul fa-lg"></i>
+    </div>
+
+    <div class="overlay-bg" onclick="toggleInventory()"></div>
+    <div id="inventoryOverlay">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 style="color: var(--brand-purple); font-weight: 700">
+          SHOP INVENTORY
+        </h4>
+        <i
+          class="fas fa-times fa-lg"
+          onclick="toggleInventory()"
+          style="cursor: pointer"
+        ></i>
+      </div>
+      <ul class="list-unstyled item-list-container">
+        <li><i class="fas fa-check-circle"></i> High-Grade Threads</li>
+        <li><i class="fas fa-check-circle"></i> Premium Linings</li>
+        <li><i class="fas fa-check-circle"></i> Banaras cloth</li>
+        <li><i class="fas fa-check-circle"></i> Tissue cloth</li>
+        <li><i class="fas fa-check-circle"></i> Cotton Silk</li>
+        <li><i class="fas fa-star"></i> Master Stitching</li>
+        <li><i class="fas fa-check-circle"></i> Saree Petticoats</li>
+        <li><i class="fas fa-check-circle"></i> Fancy Bindis</li>
+        <li><i class="fas fa-check-circle"></i> Hosiery Essentials</li>
+        <li><i class="fas fa-check-circle"></i> Pico & Saree Falls</li>
+        <li><i class="fas fa-check-circle"></i> Designer Bangles</li>
+
+        <li><i class="fas fa-check-circle"></i> Cotton Materials</li>
+      </ul>
+    </div>
+
+    <nav class="navbar shadow-sm">
+      <div class="container justify-content-center">
+        <div class="d-flex">
+          <a class="nav-link" href="#home">HOME</a>
+          <a class="nav-link" href="#services">ITEMS & SERVICES</a>
+          <a class="nav-link" href="#contact">VISIT US</a>
+        </div>
+      </div>
+    </nav>
+
+    <header id="home" class="hero">
+      <div class="container">
+        <h1>RITIKA</h1>
+        <p>FANCY STORE & TAILORING MATERIAL</p>
+      </div>
+    </header>
+
+    <div class="ribbon">
+      QUALITY FABRICS • PRECISION STITCHING • TRUSTED SERVICE
+    </div>
+
+    <section id="services" class="container mt-5 mb-5">
+      <h2 class="text-center mb-5 fw-bold">OUR SHOP ITEMS & SERVICES</h2>
+
+      <div class="row">
+        <div class="col-lg-3 desktop-sidebar-container">
+          <div class="accordion" id="shopAccordion">
+            <div class="accordion-item border-0">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button shadow-sm rounded"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#items"
+                >
+                  <i class="fas fa-list-ul me-2"></i> ITEMS WE SELL
+                </button>
+              </h2>
+              <div id="items" class="accordion-collapse collapse show">
+                <div class="accordion-body p-3 shadow-sm bg-white">
+                  <ul class="list-unstyled item-list-container m-0">
+                    <li>
+                      <i class="fas fa-check-circle"></i> High-Grade Threads
+                    </li>
+                    <li><i class="fas fa-check-circle"></i> Premium Linings</li>
+                    <li><i class="fas fa-check-circle"></i> Banaras cloth</li>
+                    <li><i class="fas fa-check-circle"></i> Tissue cloth</li>
+                    <li><i class="fas fa-check-circle"></i> Cotton Silk</li>
+                    <li><i class="fas fa-star"></i> Master Stitching</li>
+                    <li>
+                      <i class="fas fa-check-circle"></i> Saree Petticoats
+                    </li>
+                    <li><i class="fas fa-check-circle"></i> Fancy Bindis</li>
+                    <li>
+                      <i class="fas fa-check-circle"></i> Hosiery Essentials
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle"></i> Pico & Saree Falls
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle"></i> Designer Bangles
+                    </li>
+
+                    <li>
+                      <i class="fas fa-check-circle"></i> Cotton Materials
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/threads.jpg" alt="Threads" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    QUALITY THREADS
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    High-grade embroidery threads in all colors.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/stitching.jpg" alt="Blouse Stitching" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Master Tailoring
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    Specializing in designer blouse stitching and custom
+                    fitting.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/dressmaterials.jpg" alt="Dress Materials" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Dress Materials
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    Vibrant dress materials perfect for custom stitching and
+                    designs.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/bindi.jpg" alt="Bindi Collection" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Fancy Bindis
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    Designer, stone-work, and daily wear bindi collections.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/bangles.jpg" alt="Fancy Bangles" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Fancy Bangles
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    Stunning collection of daily wear and bridal bangles in
+                    various colors and sizes.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/housiery.jpg" alt="Hosiery Essentials" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Hosiery Essentials
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    Branded cotton hosiery, leggings, and comfort-wear staples.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/picoandfall.jpg" alt="Pico Falls" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Pico & Saree Falls
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    Quick and neat saree finishing services with professional
+                    care.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/lining.jpg" alt="Lining Materials" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Premium Linings
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    Wide variety of soft, high-quality linings to match fabrics
+                    perfectly.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="product-card">
+                <div class="product-image-area">
+                  <img src="images/sareepetticoat.jpg" alt="Saree Petticoat" />
+                </div>
+                <div class="product-info">
+                  <h3 class="h6 fw-bold" style="color: var(--brand-purple)">
+                    Saree Petticoat
+                  </h3>
+                  <p class="small text-muted mb-0">
+                    High-quality cotton saree petticoats in every color for a
+                    perfect fit.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="pb-5" style="background-color: #fcfcfc">
+      <div class="container">
+        <div
+          class="text-center p-4 bg-white shadow-sm"
+          style="
+            border-radius: 12px;
+            border-top: 8px solid var(--brand-red);
+            max-width: 500px;
+            margin: 0 auto;
+          "
+        >
+          <h2 class="fw-bold mb-3">PLACE YOUR ORDER</h2>
+          <div class="text-start mb-4 px-3">
+            <p class="mb-1 fw-bold small">
+              <i class="fas fa-map-marker-alt text-danger me-2"></i> Sai Nagar
+              Colony, Nagole, Hyderabad
+            </p>
+            <p class="small text-muted ms-4">OPEN DAILY: 9:00 AM - 9:30 PM</p>
+          </div>
+          <div class="d-grid gap-2 px-3">
+            <a href="tel:+919985774209" class="btn btn-danger fw-bold py-3"
+              ><i class="fas fa-phone-alt me-2"></i> CALL US DIRECTLY</a
+            >
+            <a
+              href="https://maps.app.goo.gl/wwwZtPewCkT6CsNx7"
+              target="_blank"
+              class="btn btn-outline-dark fw-bold py-2"
+              ><i class="fas fa-directions me-2"></i> GET DIRECTIONS</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-4 small">
+      Ritika Fancy Store & Tailoring Material | Nagole, Hyderabad
+    </footer>
+
+    <div class="bottom-nav">
+      <a href="#home" class="nav-btn"><i class="fas fa-home"></i> HOME</a>
+      <a href="#services" class="nav-btn"
+        ><i class="fas fa-cut"></i> OUR ITEMS</a
+      >
+      <a href="#contact" class="nav-btn"
+        ><i class="fas fa-phone-alt"></i> CONTACT US</a
+      >
+    </div>
+
+    <script>
+      function toggleInventory() {
+        const overlay = document.getElementById("inventoryOverlay");
+        const bg = document.querySelector(".overlay-bg");
+        overlay.classList.toggle("active");
+        bg.style.display = overlay.classList.contains("active")
+          ? "block"
+          : "none";
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
